@@ -1,20 +1,18 @@
 """
 Daily scheduler: generates intraday picks at 8:00 AM IST and sends to WhatsApp.
-
-Usage:
-    python3 run_scheduler.py
-
-Reads WHATSAPP_PHONE and WHATSAPP_API_KEY from .env
+Exposes a lightweight HTTP health-check on $PORT so Render web service stays alive.
 """
 import sys
 import logging
+import threading
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 import os
 from datetime import datetime
+from http.server import BaseHTTPRequestHandler, HTTPServer
 import pytz
-from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv
 
 from src.agents.daily_picks_agent import generate_daily_picks
@@ -32,13 +30,24 @@ log = logging.getLogger(__name__)
 IST = pytz.timezone("Asia/Kolkata")
 
 WHATSAPP_PHONE      = os.getenv("WHATSAPP_PHONE", "")
-WHATSAPP_PROVIDER   = os.getenv("WHATSAPP_PROVIDER", "callmebot")   # "callmebot" | "twilio"
-WHATSAPP_API_KEY    = os.getenv("WHATSAPP_API_KEY", "")              # CallMeBot key
+WHATSAPP_PROVIDER   = os.getenv("WHATSAPP_PROVIDER", "callmebot")
+WHATSAPP_API_KEY    = os.getenv("WHATSAPP_API_KEY", "")
 TWILIO_ACCOUNT_SID  = os.getenv("TWILIO_ACCOUNT_SID", "")
 TWILIO_AUTH_TOKEN   = os.getenv("TWILIO_AUTH_TOKEN", "")
 TWILIO_FROM_NUMBER  = os.getenv("TWILIO_FROM_NUMBER", "")
 SCHEDULE_HOUR       = int(os.getenv("SCHEDULE_HOUR_IST", "8"))
 SCHEDULE_MINUTE     = int(os.getenv("SCHEDULE_MINUTE_IST", "0"))
+PORT                = int(os.getenv("PORT", "8080"))
+
+
+class HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"OK")
+
+    def log_message(self, *args):
+        pass  # suppress HTTP access logs
 
 
 def job_generate_and_send() -> None:
@@ -46,7 +55,7 @@ def job_generate_and_send() -> None:
     log.info(f"Running daily picks job at {now} via {WHATSAPP_PROVIDER}")
 
     if not WHATSAPP_PHONE:
-        log.error("WHATSAPP_PHONE not set in .env — cannot send.")
+        log.error("WHATSAPP_PHONE not set — cannot send.")
         return
 
     try:
@@ -72,11 +81,7 @@ def job_generate_and_send() -> None:
 
 
 def main() -> None:
-    if not WHATSAPP_PHONE or not WHATSAPP_API_KEY:
-        print("\n⚠️  WHATSAPP_PHONE and WHATSAPP_API_KEY are not set in your .env file.")
-        print("    Add them and restart.\n")
-
-    scheduler = BlockingScheduler(timezone=IST)
+    scheduler = BackgroundScheduler(timezone=IST)
     scheduler.add_job(
         job_generate_and_send,
         trigger="cron",
@@ -85,18 +90,19 @@ def main() -> None:
         id="daily_picks",
         name=f"Daily picks at {SCHEDULE_HOUR:02d}:{SCHEDULE_MINUTE:02d} IST",
     )
+    scheduler.start()
 
     next_run = scheduler.get_jobs()[0].next_run_time
-    print(f"\n✅ Scheduler started.")
-    print(f"   Picks will be sent every day at {SCHEDULE_HOUR:02d}:{SCHEDULE_MINUTE:02d} IST")
-    print(f"   Next run: {next_run.strftime('%Y-%m-%d %H:%M IST')}")
-    print(f"   WhatsApp: {WHATSAPP_PHONE or '(not configured)'}")
-    print(f"\n   Press Ctrl+C to stop.\n")
+    log.info(f"Scheduler started — next run at {next_run.strftime('%Y-%m-%d %H:%M IST')}")
+    log.info(f"WhatsApp: {WHATSAPP_PHONE or '(not configured)'}")
+    log.info(f"Health-check server on port {PORT}")
 
+    server = HTTPServer(("0.0.0.0", PORT), HealthHandler)
     try:
-        scheduler.start()
+        server.serve_forever()
     except KeyboardInterrupt:
-        print("\nScheduler stopped.")
+        scheduler.shutdown()
+        log.info("Scheduler stopped.")
 
 
 if __name__ == "__main__":
