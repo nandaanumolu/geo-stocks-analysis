@@ -86,10 +86,9 @@ def _is_nifty50(ticker: str) -> bool:
 
 
 def generate_daily_picks(country_code: str = "IN", top_n: int = 5) -> DailyPicksResult:
-    """Generate intraday stock picks for the next trading day."""
+    """Generate intraday stock picks for today's market session."""
     today = date.today()
-    trade_date = _next_trading_day(today)
-    trade_date_str = trade_date.isoformat()
+    trade_date_str = today.isoformat()
 
     # --- news + AI analysis ---
     articles = news_agent.get_news(country_code, today, live=True)

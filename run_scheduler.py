@@ -92,7 +92,6 @@ def job_generate_and_send() -> None:
 
 
 def job_eod_report() -> None:
-    from datetime import datetime
     trade_date = datetime.now(IST).strftime("%Y-%m-%d")
     log.info(f"Running EOD report for {trade_date}")
     report = generate_eod_report(trade_date)
