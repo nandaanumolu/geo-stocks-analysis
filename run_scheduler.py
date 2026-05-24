@@ -42,9 +42,15 @@ PORT                = int(os.getenv("PORT", "8080"))
 
 class HealthHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(b"OK")
+        if self.path == "/trigger":
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"Triggered! Check Render logs for progress.")
+            threading.Thread(target=job_generate_and_send, daemon=True).start()
+        else:
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"OK")
 
     def log_message(self, *args):
         pass  # suppress HTTP access logs
