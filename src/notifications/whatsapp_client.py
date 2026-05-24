@@ -11,7 +11,7 @@ _RISK_LABEL = {"low": "LOW",  "medium": "MED",    "high": "HIGH"}
 
 def _format_pick(idx: int, p: DailyPick) -> str:
     is_buy = p.signal == "BUY"
-    sig  = "🟢 *BUY*" if is_buy else "🔴 *SELL/AVOID*"
+    sig  = "🟢 *BUY*" if is_buy else "⛔ *AVOID TODAY*"
     risk = f"{_RISK_ICON[p.risk_level]} {_RISK_LABEL[p.risk_level]} RISK"
     move = (f"+{p.expected_return_min:.1f}% → +{p.expected_return_max:.1f}%"
             if is_buy else
