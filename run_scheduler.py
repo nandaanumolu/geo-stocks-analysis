@@ -15,7 +15,7 @@ import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv
 
-from src.agents.daily_picks_agent import generate_daily_picks
+from src.agents.daily_picks_agent import generate_daily_picks, generate_eod_report
 from src.notifications.whatsapp_client import send_picks
 
 load_dotenv()
@@ -47,6 +47,11 @@ class HealthHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(b"Triggered! Check Render logs for progress.")
             threading.Thread(target=job_generate_and_send, daemon=True).start()
+        elif self.path == "/trigger-eod":
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"EOD report triggered! Check Render logs for progress.")
+            threading.Thread(target=job_eod_report, daemon=True).start()
         else:
             self.send_response(200)
             self.end_headers()
@@ -86,6 +91,23 @@ def job_generate_and_send() -> None:
         log.exception(f"Daily picks job failed: {e}")
 
 
+def job_eod_report() -> None:
+    from datetime import datetime
+    trade_date = datetime.now(IST).strftime("%Y-%m-%d")
+    log.info(f"Running EOD report for {trade_date}")
+    report = generate_eod_report(trade_date)
+    if WHATSAPP_PROVIDER == "twilio":
+        from src.notifications.whatsapp_client import send_via_twilio
+        ok, err = send_via_twilio(WHATSAPP_PHONE, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER, report)
+    else:
+        from src.notifications.whatsapp_client import send_via_callmebot
+        ok, err = send_via_callmebot(WHATSAPP_PHONE, WHATSAPP_API_KEY, report)
+    if ok:
+        log.info("EOD report sent successfully")
+    else:
+        log.error(f"EOD report send failed: {err}")
+
+
 def main() -> None:
     scheduler = BackgroundScheduler(timezone=IST)
     scheduler.add_job(
@@ -95,6 +117,14 @@ def main() -> None:
         minute=SCHEDULE_MINUTE,
         id="daily_picks",
         name=f"Daily picks at {SCHEDULE_HOUR:02d}:{SCHEDULE_MINUTE:02d} IST",
+    )
+    scheduler.add_job(
+        job_eod_report,
+        trigger="cron",
+        hour=15,
+        minute=30,
+        id="eod_report",
+        name="EOD performance report at 15:30 IST",
     )
     scheduler.start()
 

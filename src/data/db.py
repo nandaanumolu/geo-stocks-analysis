@@ -56,6 +56,18 @@ class StockRecommendationDB(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
 
+class DailyPickLog(Base):
+    __tablename__ = "daily_pick_log"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    trade_date = Column(String(10), nullable=False, index=True)  # YYYY-MM-DD
+    ticker = Column(String(20), nullable=False)
+    company_name = Column(String(200))
+    signal = Column(String(10))        # BUY
+    ref_price = Column(Float)          # last closing price at time of pick
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
 def init_db() -> None:
     Base.metadata.create_all(engine)
 

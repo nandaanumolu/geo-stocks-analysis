@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 from src.agents import news_agent, analysis_agent, recommendation_agent
 from src.data import stock_client
+from src.data.db import DailyPickLog, get_session, init_db
 from src.models.events import GeoAnalysis
 from src.models.recommendations import StockRecommendation
 from src.models.daily_picks import DailyPick, DailyPicksResult
@@ -150,6 +151,9 @@ def generate_daily_picks(country_code: str = "IN", top_n: int = 5) -> DailyPicks
         if len(picks) == top_n:
             break
 
+    # Save picks to DB for end-of-day performance report
+    _log_picks(picks, trade_date_str)
+
     return DailyPicksResult(
         generated_for=trade_date_str,
         news_count=len(articles),
@@ -157,3 +161,74 @@ def generate_daily_picks(country_code: str = "IN", top_n: int = 5) -> DailyPicks
         overall_sentiment=geo_analysis.overall_market_sentiment,
         picks=picks,
     )
+
+
+def _log_picks(picks: list[DailyPick], trade_date: str) -> None:
+    try:
+        init_db()
+        session = get_session()
+        # Remove old logs for same trade date to avoid duplicates
+        session.query(DailyPickLog).filter_by(trade_date=trade_date).delete()
+        for p in picks:
+            session.add(DailyPickLog(
+                trade_date=trade_date,
+                ticker=p.ticker,
+                company_name=p.company_name,
+                signal=p.signal,
+                ref_price=p.last_price,
+            ))
+        session.commit()
+        session.close()
+    except Exception:
+        pass  # don't let logging failure break the main flow
+
+
+def generate_eod_report(trade_date: str) -> str:
+    """Fetch closing prices for today's picks and return a WhatsApp performance summary."""
+    try:
+        init_db()
+        session = get_session()
+        logs = session.query(DailyPickLog).filter_by(trade_date=trade_date).all()
+        session.close()
+    except Exception:
+        return "⚠️ Could not load today's picks from database."
+
+    if not logs:
+        return f"📊 No picks were logged for {trade_date}."
+
+    lines = [
+        f"📊 *End-of-Day Report — {trade_date}*",
+        "━━━━━━━━━━━━━━━━━━━━",
+    ]
+
+    wins, losses, total_return = 0, 0, 0.0
+    for log in logs:
+        try:
+            close = stock_client.get_current_price(log.ticker) or 0.0
+        except Exception:
+            close = 0.0
+
+        if log.ref_price and log.ref_price > 0 and close > 0:
+            ret = (close - log.ref_price) / log.ref_price * 100
+            icon = "✅" if ret >= 0 else "❌"
+            direction = f"+{ret:.2f}%" if ret >= 0 else f"{ret:.2f}%"
+            if ret >= 0:
+                wins += 1
+            else:
+                losses += 1
+            total_return += ret
+            lines.append(f"{icon} `{log.ticker}` {log.company_name}: {direction}")
+        else:
+            lines.append(f"⏳ `{log.ticker}` {log.company_name}: price unavailable")
+
+    total = wins + losses
+    if total > 0:
+        avg = total_return / total
+        lines += [
+            "━━━━━━━━━━━━━━━━━━━━",
+            f"✅ Winners: {wins}/{total}  |  ❌ Losers: {losses}/{total}",
+            f"📈 Avg Return: {avg:+.2f}%",
+        ]
+
+    lines.append("⚠️ _AI signals only. Trade at your own risk._")
+    return "\n".join(lines)
