@@ -97,8 +97,8 @@ def generate_daily_picks(country_code: str = "IN", top_n: int = 5) -> DailyPicks
 
     if not recommendations:
         reason = (
-            "No geo-political market-moving events detected in today's news. "
-            "Check back after a major event (RBI decision, budget, border incident, oil spike)."
+            "No strong BUY signals today. Geo-political events favour selling — "
+            "best to stay in cash and wait for a clearer opportunity."
             if articles else
             "Could not fetch today's news. Check your internet connection."
         )
@@ -111,9 +111,11 @@ def generate_daily_picks(country_code: str = "IN", top_n: int = 5) -> DailyPicks
             no_picks_reason=reason,
         )
 
-    # --- build picks from top recommendations ---
+    # --- build picks from top recommendations (BUY signals only) ---
     picks: list[DailyPick] = []
-    for rec in recommendations[:top_n * 2]:          # over-sample, then trim to top_n
+    for rec in recommendations[:top_n * 4]:          # over-sample to find enough BUYs
+        if rec.signal != "BUY":
+            continue
         nifty50 = _is_nifty50(rec.ticker)
         risk = _risk_level(rec, geo_analysis, nifty50)
         ret_min, ret_max = _expected_return(rec, geo_analysis)
