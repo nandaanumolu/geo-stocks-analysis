@@ -1,4 +1,7 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
+import pytz
+
+_IST = pytz.timezone("Asia/Kolkata")
 from src.agents import news_agent, analysis_agent, recommendation_agent
 from src.data import stock_client
 from src.data.db import DailyPickLog, get_session, init_db
@@ -87,7 +90,7 @@ def _is_nifty50(ticker: str) -> bool:
 
 def generate_daily_picks(country_code: str = "IN", top_n: int = 5) -> DailyPicksResult:
     """Generate intraday stock picks for today's market session."""
-    today = date.today()
+    today = datetime.now(_IST).date()
     trade_date_str = today.isoformat()
 
     # --- news + AI analysis ---
