@@ -1,10 +1,18 @@
+import os
 from datetime import datetime
 from pathlib import Path
 from sqlalchemy import create_engine, Column, String, Float, Boolean, DateTime, Text, Integer, JSON
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-DB_PATH = Path(__file__).parent.parent.parent / "geo_stocks.db"
-engine = create_engine(f"sqlite:///{DB_PATH}", echo=False)
+_DATABASE_URL = os.getenv("DATABASE_URL")
+if _DATABASE_URL:
+    # Render provides postgres:// but SQLAlchemy 2.x needs postgresql://
+    _DATABASE_URL = _DATABASE_URL.replace("postgres://", "postgresql://", 1)
+    engine = create_engine(_DATABASE_URL, echo=False)
+else:
+    DB_PATH = Path(__file__).parent.parent.parent / "geo_stocks.db"
+    engine = create_engine(f"sqlite:///{DB_PATH}", echo=False)
+
 Session = sessionmaker(bind=engine)
 
 
