@@ -123,7 +123,7 @@ def generate_daily_picks(country_code: str = "IN", top_n: int = 5) -> DailyPicks
         exit_note  = "Sell before market close — 3:15 PM IST (same day)"
 
         try:
-            last_price = stock_client.get_current_price(rec.ticker)
+            last_price = stock_client.get_current_price(rec.ticker) or 0.0
         except Exception:
             last_price = 0.0
 
