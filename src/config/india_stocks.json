@@ -1,0 +1,479 @@
+[
+  {
+    "ticker": "HAL.NS",
+    "name": "Hindustan Aeronautics Limited",
+    "sector": "defense",
+    "geo_sensitivity": ["india_pakistan_tension", "india_china_tension", "india_budget_defense"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "BEL.NS",
+    "name": "Bharat Electronics Limited",
+    "sector": "defense",
+    "geo_sensitivity": ["india_pakistan_tension", "india_china_tension", "india_budget_defense"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "BDL.NS",
+    "name": "Bharat Dynamics Limited",
+    "sector": "defense",
+    "geo_sensitivity": ["india_pakistan_tension", "india_china_tension", "india_budget_defense"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "mid"
+  },
+  {
+    "ticker": "GRSE.NS",
+    "name": "Garden Reach Shipbuilders & Engineers",
+    "sector": "defense",
+    "geo_sensitivity": ["india_pakistan_tension", "india_china_tension", "india_budget_defense"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "mid"
+  },
+  {
+    "ticker": "MAZDOCK.NS",
+    "name": "Mazagon Dock Shipbuilders",
+    "sector": "defense",
+    "geo_sensitivity": ["india_pakistan_tension", "india_china_tension", "india_budget_defense"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "mid"
+  },
+  {
+    "ticker": "TCS.NS",
+    "name": "Tata Consultancy Services",
+    "sector": "it",
+    "geo_sensitivity": ["rupee_depreciation", "us_fed_rate_hike", "india_us_trade_deal", "india_china_trade_dispute"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "INFY.NS",
+    "name": "Infosys Limited",
+    "sector": "it",
+    "geo_sensitivity": ["rupee_depreciation", "us_fed_rate_hike", "india_us_trade_deal"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "WIPRO.NS",
+    "name": "Wipro Limited",
+    "sector": "it",
+    "geo_sensitivity": ["rupee_depreciation", "us_fed_rate_hike", "india_us_trade_deal"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "HCLTECH.NS",
+    "name": "HCL Technologies",
+    "sector": "it",
+    "geo_sensitivity": ["rupee_depreciation", "us_fed_rate_hike", "india_us_trade_deal"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "TECHM.NS",
+    "name": "Tech Mahindra",
+    "sector": "it",
+    "geo_sensitivity": ["rupee_depreciation", "us_fed_rate_hike", "india_us_trade_deal"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "HDFCBANK.NS",
+    "name": "HDFC Bank",
+    "sector": "banking",
+    "geo_sensitivity": ["rbi_rate_hike", "rbi_rate_cut", "us_fed_rate_hike", "india_election_results"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "ICICIBANK.NS",
+    "name": "ICICI Bank",
+    "sector": "banking",
+    "geo_sensitivity": ["rbi_rate_hike", "rbi_rate_cut", "us_fed_rate_hike", "india_election_results"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "SBIN.NS",
+    "name": "State Bank of India",
+    "sector": "banking",
+    "geo_sensitivity": ["rbi_rate_hike", "rbi_rate_cut", "india_budget_infrastructure", "india_election_results"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "KOTAKBANK.NS",
+    "name": "Kotak Mahindra Bank",
+    "sector": "banking",
+    "geo_sensitivity": ["rbi_rate_hike", "rbi_rate_cut", "us_fed_rate_hike"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "AXISBANK.NS",
+    "name": "Axis Bank",
+    "sector": "banking",
+    "geo_sensitivity": ["rbi_rate_hike", "rbi_rate_cut", "us_fed_rate_hike"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "RELIANCE.NS",
+    "name": "Reliance Industries",
+    "sector": "oil_gas",
+    "geo_sensitivity": ["oil_price_surge", "oil_price_drop", "west_asia_conflict", "india_us_trade_deal"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "ONGC.NS",
+    "name": "Oil & Natural Gas Corporation",
+    "sector": "oil_gas",
+    "geo_sensitivity": ["oil_price_surge", "oil_price_drop", "west_asia_conflict"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "IOC.NS",
+    "name": "Indian Oil Corporation",
+    "sector": "oil_gas",
+    "geo_sensitivity": ["oil_price_surge", "oil_price_drop", "west_asia_conflict"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "BPCL.NS",
+    "name": "Bharat Petroleum Corporation",
+    "sector": "oil_gas",
+    "geo_sensitivity": ["oil_price_surge", "oil_price_drop", "west_asia_conflict"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "GAIL.NS",
+    "name": "GAIL India",
+    "sector": "oil_gas",
+    "geo_sensitivity": ["oil_price_surge", "oil_price_drop", "sanctions_on_russia"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "SUNPHARMA.NS",
+    "name": "Sun Pharmaceutical Industries",
+    "sector": "pharma",
+    "geo_sensitivity": ["rupee_depreciation", "india_us_trade_deal", "global_recession_fears"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "DRREDDY.NS",
+    "name": "Dr. Reddy's Laboratories",
+    "sector": "pharma",
+    "geo_sensitivity": ["rupee_depreciation", "india_us_trade_deal"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "CIPLA.NS",
+    "name": "Cipla Limited",
+    "sector": "pharma",
+    "geo_sensitivity": ["rupee_depreciation", "india_us_trade_deal", "global_recession_fears"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "DIVISLAB.NS",
+    "name": "Divi's Laboratories",
+    "sector": "pharma",
+    "geo_sensitivity": ["rupee_depreciation", "india_us_trade_deal"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "APOLLOHOSP.NS",
+    "name": "Apollo Hospitals Enterprise",
+    "sector": "pharma",
+    "geo_sensitivity": ["rupee_depreciation", "global_recession_fears"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "HINDUNILVR.NS",
+    "name": "Hindustan Unilever",
+    "sector": "fmcg",
+    "geo_sensitivity": ["oil_price_surge", "monsoon_normal", "monsoon_deficient", "global_recession_fears"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "NESTLEIND.NS",
+    "name": "Nestle India",
+    "sector": "fmcg",
+    "geo_sensitivity": ["oil_price_surge", "monsoon_normal", "global_recession_fears"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "BRITANNIA.NS",
+    "name": "Britannia Industries",
+    "sector": "fmcg",
+    "geo_sensitivity": ["oil_price_surge", "monsoon_normal", "global_recession_fears"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "MARICO.NS",
+    "name": "Marico Limited",
+    "sector": "fmcg",
+    "geo_sensitivity": ["oil_price_surge", "monsoon_normal"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "DABUR.NS",
+    "name": "Dabur India",
+    "sector": "fmcg",
+    "geo_sensitivity": ["oil_price_surge", "monsoon_normal", "monsoon_deficient"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "MARUTI.NS",
+    "name": "Maruti Suzuki India",
+    "sector": "auto",
+    "geo_sensitivity": ["oil_price_surge", "oil_price_drop", "rbi_rate_cut", "monsoon_normal", "india_china_tension"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "TATAMOTORS.NS",
+    "name": "Tata Motors",
+    "sector": "auto",
+    "geo_sensitivity": ["oil_price_drop", "rbi_rate_cut", "india_china_tension", "global_recession_fears"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "M&M.NS",
+    "name": "Mahindra & Mahindra",
+    "sector": "auto",
+    "geo_sensitivity": ["oil_price_drop", "rbi_rate_cut", "monsoon_normal", "monsoon_deficient"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "BAJAJ-AUTO.NS",
+    "name": "Bajaj Auto",
+    "sector": "auto",
+    "geo_sensitivity": ["oil_price_drop", "rbi_rate_cut", "monsoon_normal"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "HEROMOTOCO.NS",
+    "name": "Hero MotoCorp",
+    "sector": "auto",
+    "geo_sensitivity": ["oil_price_drop", "rbi_rate_cut", "monsoon_normal", "monsoon_deficient"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "BHARTIARTL.NS",
+    "name": "Bharti Airtel",
+    "sector": "telecom",
+    "geo_sensitivity": ["india_china_tension", "india_us_trade_deal"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "TATASTEEL.NS",
+    "name": "Tata Steel",
+    "sector": "metals",
+    "geo_sensitivity": ["india_china_trade_dispute", "india_budget_infrastructure", "global_recession_fears", "us_fed_rate_hike"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "JSWSTEEL.NS",
+    "name": "JSW Steel",
+    "sector": "metals",
+    "geo_sensitivity": ["india_china_trade_dispute", "india_budget_infrastructure", "global_recession_fears"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "HINDALCO.NS",
+    "name": "Hindalco Industries",
+    "sector": "metals",
+    "geo_sensitivity": ["india_china_trade_dispute", "global_recession_fears", "us_fed_rate_hike"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "VEDL.NS",
+    "name": "Vedanta Limited",
+    "sector": "metals",
+    "geo_sensitivity": ["india_china_trade_dispute", "global_recession_fears", "us_fed_rate_hike"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "INDIGO.NS",
+    "name": "IndiGo (InterGlobe Aviation)",
+    "sector": "aviation",
+    "geo_sensitivity": ["oil_price_surge", "oil_price_drop", "india_pakistan_tension", "west_asia_conflict", "rupee_depreciation"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "ASIANPAINT.NS",
+    "name": "Asian Paints",
+    "sector": "chemicals",
+    "geo_sensitivity": ["oil_price_surge", "oil_price_drop", "rbi_rate_cut"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "PIDILITIND.NS",
+    "name": "Pidilite Industries",
+    "sector": "chemicals",
+    "geo_sensitivity": ["oil_price_surge", "oil_price_drop"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "LT.NS",
+    "name": "Larsen & Toubro",
+    "sector": "infrastructure",
+    "geo_sensitivity": ["india_budget_infrastructure", "india_election_results", "india_budget_defense"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "ULTRACEMCO.NS",
+    "name": "UltraTech Cement",
+    "sector": "infrastructure",
+    "geo_sensitivity": ["india_budget_infrastructure", "india_election_results", "rbi_rate_cut"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "ADANIPORTS.NS",
+    "name": "Adani Ports & SEZ",
+    "sector": "infrastructure",
+    "geo_sensitivity": ["india_budget_infrastructure", "india_china_trade_dispute", "india_us_trade_deal"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "DLF.NS",
+    "name": "DLF Limited",
+    "sector": "real_estate",
+    "geo_sensitivity": ["rbi_rate_hike", "rbi_rate_cut", "us_fed_rate_hike", "india_election_results"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "GODREJPROP.NS",
+    "name": "Godrej Properties",
+    "sector": "real_estate",
+    "geo_sensitivity": ["rbi_rate_hike", "rbi_rate_cut", "us_fed_rate_hike"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "COROMANDEL.NS",
+    "name": "Coromandel International",
+    "sector": "fertilizers",
+    "geo_sensitivity": ["sanctions_on_russia", "monsoon_normal", "monsoon_deficient"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "mid"
+  },
+  {
+    "ticker": "CHAMBLFERT.NS",
+    "name": "Chambal Fertilisers",
+    "sector": "fertilizers",
+    "geo_sensitivity": ["sanctions_on_russia", "monsoon_normal", "monsoon_deficient"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "mid"
+  },
+  {
+    "ticker": "ADANIGREEN.NS",
+    "name": "Adani Green Energy",
+    "sector": "renewable_energy",
+    "geo_sensitivity": ["oil_price_surge", "west_asia_conflict", "india_budget_infrastructure"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "TATAPOWER.NS",
+    "name": "Tata Power Company",
+    "sector": "renewable_energy",
+    "geo_sensitivity": ["oil_price_surge", "west_asia_conflict", "india_budget_infrastructure"],
+    "nifty50": false,
+    "nifty500": true,
+    "market_cap_category": "large"
+  },
+  {
+    "ticker": "NTPC.NS",
+    "name": "NTPC Limited",
+    "sector": "renewable_energy",
+    "geo_sensitivity": ["oil_price_surge", "india_budget_infrastructure"],
+    "nifty50": true,
+    "nifty500": true,
+    "market_cap_category": "large"
+  }
+]

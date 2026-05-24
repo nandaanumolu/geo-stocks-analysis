@@ -1,0 +1,32 @@
+services:
+  - type: worker
+    name: geo-stocks-scheduler
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python run_scheduler.py
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: WHATSAPP_PROVIDER
+        value: twilio
+      - key: WHATSAPP_PHONE
+        sync: false
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_FROM_NUMBER
+        value: +14155238886
+      - key: SCHEDULE_HOUR_IST
+        value: "8"
+      - key: SCHEDULE_MINUTE_IST
+        value: "0"
+
+  - type: web
+    name: geo-stocks-ui
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run src/ui/app.py --server.port $PORT --server.address 0.0.0.0 --server.headless true
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false

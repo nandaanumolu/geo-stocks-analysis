@@ -1,0 +1,82 @@
+{
+  "india_pakistan_tension": {
+    "positive": ["defense"],
+    "negative": ["aviation", "tourism", "hospitality"]
+  },
+  "india_china_tension": {
+    "positive": ["defense", "domestic_manufacturing", "electronics"],
+    "negative": ["import_dependent", "auto"]
+  },
+  "india_china_trade_dispute": {
+    "positive": ["defense", "domestic_manufacturing", "it"],
+    "negative": ["auto", "consumer_electronics"]
+  },
+  "oil_price_surge": {
+    "positive": ["oil_gas"],
+    "negative": ["aviation", "chemicals", "paint", "fmcg"]
+  },
+  "oil_price_drop": {
+    "positive": ["aviation", "chemicals", "paint", "fmcg", "auto"],
+    "negative": ["oil_gas"]
+  },
+  "rupee_depreciation": {
+    "positive": ["it", "pharma"],
+    "negative": ["oil_downstream", "aviation", "import_dependent"]
+  },
+  "rupee_appreciation": {
+    "positive": ["aviation", "import_dependent"],
+    "negative": ["it", "pharma"]
+  },
+  "us_fed_rate_hike": {
+    "positive": ["it"],
+    "negative": ["banking", "real_estate", "metals"]
+  },
+  "us_fed_rate_cut": {
+    "positive": ["banking", "real_estate", "metals"],
+    "negative": []
+  },
+  "india_budget_infrastructure": {
+    "positive": ["infrastructure", "metals", "cement", "banking"],
+    "negative": []
+  },
+  "india_budget_defense": {
+    "positive": ["defense"],
+    "negative": []
+  },
+  "india_election_results": {
+    "positive": ["infrastructure", "banking"],
+    "negative": []
+  },
+  "global_recession_fears": {
+    "positive": ["fmcg", "pharma"],
+    "negative": ["metals", "auto", "it"]
+  },
+  "monsoon_deficient": {
+    "positive": ["irrigation", "agri_inputs"],
+    "negative": ["fmcg", "auto", "rural_consumption"]
+  },
+  "monsoon_normal": {
+    "positive": ["fmcg", "auto", "banking"],
+    "negative": []
+  },
+  "west_asia_conflict": {
+    "positive": ["oil_gas", "defense"],
+    "negative": ["aviation", "tourism"]
+  },
+  "rbi_rate_hike": {
+    "positive": ["banking"],
+    "negative": ["real_estate", "auto", "fmcg"]
+  },
+  "rbi_rate_cut": {
+    "positive": ["real_estate", "auto", "banking", "fmcg"],
+    "negative": []
+  },
+  "india_us_trade_deal": {
+    "positive": ["it", "pharma"],
+    "negative": []
+  },
+  "sanctions_on_russia": {
+    "positive": ["defense"],
+    "negative": ["fertilizers", "chemicals"]
+  }
+}
