@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 from src.agents import news_agent, analysis_agent, recommendation_agent
+from src.data import stock_client
 from src.models.events import GeoAnalysis
 from src.models.recommendations import StockRecommendation
 from src.models.daily_picks import DailyPick, DailyPicksResult
@@ -121,6 +122,11 @@ def generate_daily_picks(country_code: str = "IN", top_n: int = 5) -> DailyPicks
         entry_note = "Buy at market open — 9:15 AM IST"
         exit_note  = "Sell before market close — 3:15 PM IST (same day)"
 
+        try:
+            last_price = stock_client.get_current_price(rec.ticker)
+        except Exception:
+            last_price = 0.0
+
         picks.append(DailyPick(
             ticker=rec.ticker,
             company_name=rec.company_name,
@@ -130,6 +136,7 @@ def generate_daily_picks(country_code: str = "IN", top_n: int = 5) -> DailyPicks
             entry_note=entry_note,
             exit_note=exit_note,
             risk_level=risk,
+            last_price=last_price,
             expected_return_min=ret_min,
             expected_return_max=ret_max,
             stop_loss_pct=stop,

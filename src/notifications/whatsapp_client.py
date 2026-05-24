@@ -19,12 +19,31 @@ def _format_pick(idx: int, p: DailyPick) -> str:
     sl   = (f"Cut if drops -{p.stop_loss_pct:.1f}%"
             if is_buy else
             f"Exit if rises +{p.stop_loss_pct:.1f}%")
+
+    price_lines = ""
+    if p.last_price and p.last_price > 0:
+        ref = p.last_price
+        if is_buy:
+            tgt_lo = ref * (1 + p.expected_return_min / 100)
+            tgt_hi = ref * (1 + p.expected_return_max / 100)
+            sl_px  = ref * (1 - p.stop_loss_pct / 100)
+        else:
+            tgt_lo = ref * (1 - p.expected_return_min / 100)
+            tgt_hi = ref * (1 - p.expected_return_max / 100)
+            sl_px  = ref * (1 + p.stop_loss_pct / 100)
+        price_lines = (
+            f"\n   💰 Ref: ₹{ref:.2f}"
+            f"\n   🎯 Target: ₹{min(tgt_lo,tgt_hi):.2f} → ₹{max(tgt_lo,tgt_hi):.2f}"
+            f"\n   🛑 Stop ₹: ₹{sl_px:.2f}"
+        )
+
     return (
         f"*{idx}.* {sig}  `{p.ticker}`\n"
         f"   {p.company_name}\n"
         f"   {risk}  |  conf {p.confidence:.0f}%\n"
         f"   📈 Move: {move}\n"
-        f"   🛑 Stop: {sl}"
+        f"   🛑 Stop %: {sl}"
+        f"{price_lines}"
     )
 
 

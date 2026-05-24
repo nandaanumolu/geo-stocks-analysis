@@ -12,6 +12,7 @@ class DailyPick(BaseModel):
     entry_note: str                  # "Buy at market open 9:15 AM IST"
     exit_note: str                   # "Sell before 3:15 PM IST close"
     risk_level: Literal["low", "medium", "high"]
+    last_price: float = 0.0          # last closing price in INR
     expected_return_min: float       # e.g. 1.5  (%)
     expected_return_max: float       # e.g. 4.0  (%)
     stop_loss_pct: float             # e.g. 1.5  (%)
