@@ -7,16 +7,8 @@ services:
     envVars:
       - key: ANTHROPIC_API_KEY
         sync: false
-      - key: WHATSAPP_PROVIDER
-        value: twilio
-      - key: WHATSAPP_PHONE
-        sync: false
-      - key: TWILIO_ACCOUNT_SID
-        sync: false
-      - key: TWILIO_AUTH_TOKEN
-        sync: false
-      - key: TWILIO_FROM_NUMBER
-        value: +14155238886
+      - key: N8N_WEBHOOK_URL
+        value: https://automation-ops.app.n8n.cloud/webhook/5853eefc-c17b-47e6-8a2d-b17bebec4c74
       - key: SCHEDULE_HOUR_IST
         value: "8"
       - key: SCHEDULE_MINUTE_IST

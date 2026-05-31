@@ -1,7 +1,10 @@
 import json
+import logging
 import anthropic
 from src.config.settings import get_settings
 from src.models.events import NewsItem, GeoAnalysis
+
+log = logging.getLogger(__name__)
 
 _SYSTEM_PROMPT = """You are a geo-political financial analyst specializing in Indian equity markets (NSE/BSE).
 
@@ -45,12 +48,59 @@ def _get_client() -> anthropic.Anthropic:
     return anthropic.Anthropic(api_key=get_settings().anthropic_api_key)
 
 
+def _get_recent_learnings(days: int = 7) -> str:
+    """Query DailyLearning table and return a formatted string of recent lessons."""
+    try:
+        from src.data.db import DailyLearning, get_session, init_db
+        init_db()
+        session = get_session()
+        rows = (
+            session.query(DailyLearning)
+            .order_by(DailyLearning.trade_date.desc())
+            .limit(days)
+            .all()
+        )
+        session.close()
+
+        if not rows:
+            return ""
+
+        lines = ["LESSONS FROM RECENT PREDICTIONS (use these to improve accuracy):", ""]
+        for row in rows:
+            lines.append(
+                f"[{row.trade_date}] Hit rate: {row.hit_rate:.0f}%, "
+                f"Avg return: {row.avg_return_pct:+.2f}%"
+            )
+            if row.what_worked:
+                lines.append(f"  Worked: {row.what_worked}")
+            if row.what_failed:
+                lines.append(f"  Failed: {row.what_failed}")
+            try:
+                lessons = json.loads(row.lessons) if row.lessons else []
+            except Exception:
+                lessons = []
+            for lesson in lessons:
+                lines.append(f"  → {lesson}")
+            lines.append("")
+
+        return "\n".join(lines).rstrip()
+    except Exception:
+        log.exception("_get_recent_learnings: failed to load learnings")
+        return ""
+
+
 def _build_user_prompt(articles: list[NewsItem]) -> str:
+    learnings = _get_recent_learnings()
     articles_json = json.dumps(
         [{"title": a.title, "source": a.source, "published_at": a.published_at} for a in articles[:30]],
         indent=2
     )
-    return f"Analyze these news articles for geo-political events affecting Indian stock markets:\n\n{articles_json}"
+    analysis_request = (
+        f"Analyze these news articles for geo-political events affecting Indian stock markets:\n\n{articles_json}"
+    )
+    if learnings:
+        return f"{learnings}\n\n{analysis_request}"
+    return analysis_request
 
 
 def _parse_response(text: str) -> GeoAnalysis:

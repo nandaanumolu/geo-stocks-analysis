@@ -76,6 +76,40 @@ class DailyPickLog(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
 
+class PickDetail(Base):
+    __tablename__ = "pick_detail"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    trade_date = Column(String(10), nullable=False, index=True)
+    ticker = Column(String(20), nullable=False)
+    company_name = Column(String(200))
+    sector = Column(String(50))
+    signal = Column(String(10))
+    confidence = Column(Float)
+    risk_level = Column(String(10))
+    ref_price = Column(Float)
+    predicted_return_min = Column(Float)
+    predicted_return_max = Column(Float)
+    stop_loss_pct = Column(Float)
+    reasoning = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class DailyLearning(Base):
+    __tablename__ = "daily_learning"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    trade_date = Column(String(10), unique=True, nullable=False)
+    hit_rate = Column(Float)
+    avg_return_pct = Column(Float)
+    total_picks = Column(Integer)
+    what_worked = Column(Text)
+    what_failed = Column(Text)
+    lessons = Column(Text)   # JSON list of strings
+    raw_json = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
 def init_db() -> None:
     Base.metadata.create_all(engine)
 

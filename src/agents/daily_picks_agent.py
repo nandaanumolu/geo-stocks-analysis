@@ -4,7 +4,7 @@ import pytz
 _IST = pytz.timezone("Asia/Kolkata")
 from src.agents import news_agent, analysis_agent, recommendation_agent
 from src.data import stock_client
-from src.data.db import DailyPickLog, get_session, init_db
+from src.data.db import DailyPickLog, PickDetail, get_session, init_db
 from src.models.events import GeoAnalysis
 from src.models.recommendations import StockRecommendation
 from src.models.daily_picks import DailyPick, DailyPicksResult
@@ -171,6 +171,7 @@ def _log_picks(picks: list[DailyPick], trade_date: str) -> None:
         session = get_session()
         # Remove old logs for same trade date to avoid duplicates
         session.query(DailyPickLog).filter_by(trade_date=trade_date).delete()
+        session.query(PickDetail).filter_by(trade_date=trade_date).delete()
         for p in picks:
             session.add(DailyPickLog(
                 trade_date=trade_date,
@@ -178,6 +179,20 @@ def _log_picks(picks: list[DailyPick], trade_date: str) -> None:
                 company_name=p.company_name,
                 signal=p.signal,
                 ref_price=p.last_price,
+            ))
+            session.add(PickDetail(
+                trade_date=trade_date,
+                ticker=p.ticker,
+                company_name=p.company_name,
+                sector=p.sector,
+                signal=p.signal,
+                confidence=p.confidence,
+                risk_level=p.risk_level,
+                ref_price=p.last_price,
+                predicted_return_min=p.expected_return_min,
+                predicted_return_max=p.expected_return_max,
+                stop_loss_pct=p.stop_loss_pct,
+                reasoning=p.reasoning,
             ))
         session.commit()
         session.close()

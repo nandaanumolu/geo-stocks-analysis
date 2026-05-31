@@ -16,7 +16,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv
 
 from src.agents.daily_picks_agent import generate_daily_picks, generate_eod_report
-from src.notifications.whatsapp_client import send_picks
+from src.agents.post_mortem_agent import run_post_mortem
+from src.notifications.webhook_client import send_daily_picks, send_eod_report
 
 load_dotenv()
 
@@ -29,12 +30,7 @@ log = logging.getLogger(__name__)
 
 IST = pytz.timezone("Asia/Kolkata")
 
-WHATSAPP_PHONE      = os.getenv("WHATSAPP_PHONE", "")
-WHATSAPP_PROVIDER   = os.getenv("WHATSAPP_PROVIDER", "callmebot")
-WHATSAPP_API_KEY    = os.getenv("WHATSAPP_API_KEY", "")
-TWILIO_ACCOUNT_SID  = os.getenv("TWILIO_ACCOUNT_SID", "")
-TWILIO_AUTH_TOKEN   = os.getenv("TWILIO_AUTH_TOKEN", "")
-TWILIO_FROM_NUMBER  = os.getenv("TWILIO_FROM_NUMBER", "")
+N8N_WEBHOOK_URL     = os.getenv("N8N_WEBHOOK_URL", "")
 SCHEDULE_HOUR       = int(os.getenv("SCHEDULE_HOUR_IST", "8"))
 SCHEDULE_MINUTE     = int(os.getenv("SCHEDULE_MINUTE_IST", "0"))
 PORT                = int(os.getenv("PORT", "8080"))
@@ -63,10 +59,10 @@ class HealthHandler(BaseHTTPRequestHandler):
 
 def job_generate_and_send() -> None:
     now = datetime.now(IST).strftime("%Y-%m-%d %H:%M IST")
-    log.info(f"Running daily picks job at {now} via {WHATSAPP_PROVIDER}")
+    log.info(f"Running daily picks job at {now}")
 
-    if not WHATSAPP_PHONE:
-        log.error("WHATSAPP_PHONE not set — cannot send.")
+    if not N8N_WEBHOOK_URL:
+        log.error("N8N_WEBHOOK_URL not set — cannot send.")
         return
 
     try:
@@ -74,19 +70,11 @@ def job_generate_and_send() -> None:
         result = generate_daily_picks("IN")
         log.info(f"Generated {len(result.picks)} picks for {result.generated_for}")
 
-        ok, err = send_picks(
-            result,
-            provider=WHATSAPP_PROVIDER,
-            phone=WHATSAPP_PHONE,
-            callmebot_api_key=WHATSAPP_API_KEY,
-            twilio_account_sid=TWILIO_ACCOUNT_SID,
-            twilio_auth_token=TWILIO_AUTH_TOKEN,
-            twilio_from_number=TWILIO_FROM_NUMBER,
-        )
+        ok, err = send_daily_picks(N8N_WEBHOOK_URL, result)
         if ok:
-            log.info(f"WhatsApp sent successfully to {WHATSAPP_PHONE}")
+            log.info("Daily picks sent to n8n webhook successfully")
         else:
-            log.error(f"WhatsApp send failed: {err}")
+            log.error(f"Webhook send failed: {err}")
     except Exception as e:
         log.exception(f"Daily picks job failed: {e}")
 
@@ -94,17 +82,26 @@ def job_generate_and_send() -> None:
 def job_eod_report() -> None:
     trade_date = datetime.now(IST).strftime("%Y-%m-%d")
     log.info(f"Running EOD report for {trade_date}")
+
+    if not N8N_WEBHOOK_URL:
+        log.error("N8N_WEBHOOK_URL not set — cannot send.")
+        return
+
     report = generate_eod_report(trade_date)
-    if WHATSAPP_PROVIDER == "twilio":
-        from src.notifications.whatsapp_client import send_via_twilio
-        ok, err = send_via_twilio(WHATSAPP_PHONE, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER, report)
-    else:
-        from src.notifications.whatsapp_client import send_via_callmebot
-        ok, err = send_via_callmebot(WHATSAPP_PHONE, WHATSAPP_API_KEY, report)
+
+    post_mortem_text = ""
+    try:
+        log.info("Running post-mortem analysis...")
+        post_mortem_text = run_post_mortem(trade_date) or ""
+        log.info("Post-mortem analysis complete")
+    except Exception as e:
+        log.exception(f"Post-mortem failed (non-fatal): {e}")
+
+    ok, err = send_eod_report(N8N_WEBHOOK_URL, report, trade_date, post_mortem=post_mortem_text)
     if ok:
-        log.info("EOD report sent successfully")
+        log.info("EOD report sent to n8n webhook successfully")
     else:
-        log.error(f"EOD report send failed: {err}")
+        log.error(f"EOD report webhook send failed: {err}")
 
 
 def main() -> None:
@@ -129,7 +126,7 @@ def main() -> None:
 
     next_run = scheduler.get_jobs()[0].next_run_time
     log.info(f"Scheduler started — next run at {next_run.strftime('%Y-%m-%d %H:%M IST')}")
-    log.info(f"WhatsApp: {WHATSAPP_PHONE or '(not configured)'}")
+    log.info(f"Webhook: {N8N_WEBHOOK_URL or '(not configured)'}")
     log.info(f"Health-check server on port {PORT}")
 
     server = HTTPServer(("0.0.0.0", PORT), HealthHandler)
